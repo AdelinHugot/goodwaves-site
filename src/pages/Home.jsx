@@ -85,8 +85,17 @@ export default function Home() {
     if (neaTextRef.current) textObserver.observe(neaTextRef.current)
     if (sphereRef.current) sphereObserver.observe(sphereRef.current)
 
-    // Scroll parallax pour la section NEA Connect et NEA
+    // Cache fadeElements for better performance
+    let cachedFadeElements = []
+    let lastUpdateTime = 0
+    const THROTTLE_MS = 16 // ~60fps
+
+    // Scroll parallax pour la section NEA Connect et NEA (with throttling)
     const handleConnectScroll = () => {
+      const now = Date.now()
+      if (now - lastUpdateTime < THROTTLE_MS) return
+      lastUpdateTime = now
+
       const windowHeight = window.innerHeight
       const screenMiddle = windowHeight / 2
 
@@ -120,48 +129,32 @@ export default function Home() {
 
       rightTextRef.current.style.transform = `translateY(${yOffset}px)`
 
-      // Change la font-weight progressivement et la couleur pour les paragraphes gris
-      const elements = rightTextRef.current.querySelectorAll('p')
-      const fadeElements = Array.from(elements).filter(el => el.getAttribute('data-fade') === 'true')
+      // Cache fade elements on first run
+      if (cachedFadeElements.length === 0 && rightTextRef.current) {
+        const elements = rightTextRef.current.querySelectorAll('p')
+        cachedFadeElements = Array.from(elements).filter(el => el.getAttribute('data-fade') === 'true')
+      }
 
+      // Change la font-weight progressivement et la couleur pour les paragraphes
+      const elements = rightTextRef.current.querySelectorAll('p')
       elements.forEach((el) => {
         el.style.fontWeight = Math.round(fontWeightValue)
 
         // Pour les éléments avec data-fade, créer un effet ligne par ligne
         if (el.getAttribute('data-fade') === 'true') {
-          const elementIndex = fadeElements.indexOf(el)
-
           // Obtenir la position de l'élément au milieu de l'écran
           const elRect = el.getBoundingClientRect()
-          const elTop = elRect.top
-          const elHeight = elRect.height
-          const elMiddle = elTop + elHeight / 2
-
-          // Calculer la distance au milieu de l'écran
+          const elMiddle = elRect.top + elRect.height / 2
           const distanceToMiddle = elMiddle - screenMiddle
-
-          // Zone de transition : 100px avant et après le milieu
-          const transitionRange = 100
-
-          // Vérifier si l'élément est dans la zone blanche (3 lignes)
-          // La zone blanche sera centrée au milieu de l'écran
           const distFromCenter = Math.abs(distanceToMiddle)
-
-          // Les 3 lignes au milieu seront blanches (estimé à ~47px par ligne avec fontSize 36px)
           const isInWhiteZone = distFromCenter < 70
 
-          if (isInWhiteZone) {
-            // Blanc complet
-            el.style.color = `rgb(255, 255, 255)`
-          } else {
-            // Gris
-            el.style.color = `rgb(141, 141, 141)`
-          }
+          el.style.color = isInWhiteZone ? `rgb(255, 255, 255)` : `rgb(141, 141, 141)`
         }
       })
     }
 
-    window.addEventListener('scroll', handleConnectScroll)
+    window.addEventListener('scroll', handleConnectScroll, { passive: true })
 
     return () => {
       observer.disconnect()
