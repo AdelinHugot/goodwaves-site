@@ -1,5 +1,19 @@
 import { useEffect, useRef } from 'react'
-import * as THREE from 'three'
+import {
+  Scene,
+  PerspectiveCamera,
+  WebGLRenderer,
+  AmbientLight,
+  PointLight,
+  ShaderMaterial,
+  BufferGeometry,
+  BufferAttribute,
+  Points,
+  AdditiveBlending,
+  SRGBColorSpace,
+  NormalBlending,
+  Vector2
+} from 'three'
 
 export default function ParticleSphere() {
   const containerRef = useRef(null)
@@ -12,24 +26,24 @@ export default function ParticleSphere() {
     if (!containerRef.current) return
 
     // ============ SCENE SETUP ============
-    const scene = new THREE.Scene()
+    const scene = new Scene()
     const width = containerRef.current.clientWidth
     const height = containerRef.current.clientHeight
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+    const camera = new PerspectiveCamera(75, width / height, 0.1, 1000)
     camera.position.z = 60
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    const renderer = new WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(width, height)
     renderer.setClearColor(0x191919)
-    renderer.outputColorSpace = THREE.SRGBColorSpace
+    renderer.outputColorSpace = SRGBColorSpace
     containerRef.current.appendChild(renderer.domElement)
 
     // Minimal lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0)
+    const ambientLight = new AmbientLight(0xffffff, 1.0)
     scene.add(ambientLight)
 
     // Lumière violette interactive suivant la souris
-    const pointLight = new THREE.PointLight(0x9d4edd, 2.0, 100)
+    const pointLight = new PointLight(0x9d4edd, 2.0, 100)
     pointLight.position.set(0, 0, 40)
     scene.add(pointLight)
 
@@ -167,7 +181,7 @@ export default function ParticleSphere() {
 
     // ============ CREATE PARTICLE SPHERE ============
     const particleCount = 15000
-    const geometry = new THREE.BufferGeometry()
+    const geometry = new BufferGeometry()
     const positions = new Float32Array(particleCount * 3)
 
     const sphereRadius = 25
@@ -202,29 +216,29 @@ export default function ParticleSphere() {
       positions[i * 3 + 2] = z
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    geometry.setAttribute('position', new BufferAttribute(positions, 3))
 
     const uniforms = {
       uTime: { value: 0 },
-      uMouse: { value: new THREE.Vector2(0, 0) },
+      uMouse: { value: new Vector2(0, 0) },
       uWaveTime: { value: 0 }
     }
 
-    const material = new THREE.ShaderMaterial({
+    const material = new ShaderMaterial({
       vertexShader,
       fragmentShader,
       uniforms,
       transparent: true,
-      blending: THREE.NormalBlending,
+      blending: NormalBlending,
       depthWrite: false,
       depthTest: true
     })
 
-    const particles = new THREE.Points(geometry, material)
+    const particles = new Points(geometry, material)
     scene.add(particles)
 
     // ============ VIOLET PARTICLE LAYER ============
-    const violetGeometry = new THREE.BufferGeometry()
+    const violetGeometry = new BufferGeometry()
     const violetPositions = new Float32Array(particleCount * 3)
 
     for (let i = 0; i < particleCount; i++) {
@@ -254,9 +268,9 @@ export default function ParticleSphere() {
       violetPositions[i * 3 + 2] = z
     }
 
-    violetGeometry.setAttribute('position', new THREE.BufferAttribute(violetPositions, 3))
+    violetGeometry.setAttribute('position', new BufferAttribute(violetPositions, 3))
 
-    const violetMaterial = new THREE.ShaderMaterial({
+    const violetMaterial = new ShaderMaterial({
       vertexShader: `
         uniform float uTime;
         uniform vec2 uMouse;
@@ -334,16 +348,16 @@ export default function ParticleSphere() {
       `,
       uniforms: {
         uTime: { value: 0 },
-        uMouse: { value: new THREE.Vector2(0, 0) },
+        uMouse: { value: new Vector2(0, 0) },
         uWaveTime: { value: 0 }
       },
       transparent: true,
-      blending: THREE.AdditiveBlending,
+      blending: AdditiveBlending,
       depthWrite: false,
       depthTest: true
     })
 
-    const violetParticles = new THREE.Points(violetGeometry, violetMaterial)
+    const violetParticles = new Points(violetGeometry, violetMaterial)
     scene.add(violetParticles)
 
     // ============ INTERACTION ============

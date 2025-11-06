@@ -1,5 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
-import * as THREE from 'three'
+import {
+  Scene,
+  PerspectiveCamera,
+  WebGLRenderer,
+  AmbientLight,
+  PointLight,
+  ShaderMaterial,
+  BufferGeometry,
+  BufferAttribute,
+  Points,
+  AdditiveBlending,
+  SRGBColorSpace
+} from 'three'
 import './ChatbotSphere.css'
 
 export default function ChatbotSphere() {
@@ -11,24 +23,24 @@ export default function ChatbotSphere() {
     if (!containerRef.current) return
 
     // ============ SCENE SETUP ============
-    const scene = new THREE.Scene()
+    const scene = new Scene()
     const width = 120
     const height = 120
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+    const camera = new PerspectiveCamera(75, width / height, 0.1, 1000)
     camera.position.z = 60
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    const renderer = new WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(width, height)
     renderer.setClearColor(0x000000, 0)
-    renderer.outputColorSpace = THREE.SRGBColorSpace
+    renderer.outputColorSpace = SRGBColorSpace
     containerRef.current.appendChild(renderer.domElement)
 
     // Minimal lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0)
+    const ambientLight = new AmbientLight(0xffffff, 1.0)
     scene.add(ambientLight)
 
     // Lumière violette
-    const pointLight = new THREE.PointLight(0x9d4edd, 2.0, 100)
+    const pointLight = new PointLight(0x9d4edd, 2.0, 100)
     pointLight.position.set(0, 0, 40)
     scene.add(pointLight)
 
@@ -136,19 +148,19 @@ export default function ChatbotSphere() {
       }
     `
 
-    const material = new THREE.ShaderMaterial({
+    const material = new ShaderMaterial({
       vertexShader,
       fragmentShader,
       uniforms: {
         uTime: { value: 0 }
       },
-      blending: THREE.AdditiveBlending,
+      blending: AdditiveBlending,
       depthWrite: false
     })
 
     // ============ CREATE PARTICLES ============
     const particleCount = 5000
-    const geometry = new THREE.BufferGeometry()
+    const geometry = new BufferGeometry()
     const positions = new Float32Array(particleCount * 3)
 
     for (let i = 0; i < particleCount * 3; i += 3) {
@@ -161,8 +173,8 @@ export default function ChatbotSphere() {
       positions[i + 2] = radius * Math.cos(phi)
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    const particles = new THREE.Points(geometry, material)
+    geometry.setAttribute('position', new BufferAttribute(positions, 3))
+    const particles = new Points(geometry, material)
     scene.add(particles)
 
     // ============ ANIMATION LOOP ============
