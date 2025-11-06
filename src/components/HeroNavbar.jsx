@@ -8,7 +8,7 @@ export default function HeroNavbar() {
     <nav className="hero-navbar-wrapper">
       <div className="hero-navbar-content">
         <div className="hero-navbar-logo">
-          <img src="/img/Logo Goodawaves.png" alt="Goodwaves Logo" />
+          <img src="/img/Logo Goodawaves.webp" alt="Goodwaves Logo" width="50" height="50" />
         </div>
 
         <div className="hero-navbar-pill">

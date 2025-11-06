@@ -8,7 +8,7 @@ export default function Header() {
     <header className="header">
       <div className="header-content">
         <div className="header-logo">
-          <img src="/img/Logo Goodawaves.png" alt="Goodwaves Logo" />
+          <img src="/img/Logo Goodawaves.webp" alt="Goodwaves Logo" width="50" height="50" />
         </div>
 
         <div className="header-pill">
