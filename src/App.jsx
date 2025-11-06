@@ -1,10 +1,18 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import './App.css'
+
+// Lazy load heavy components
+const ParticleSphere = lazy(() => import('./components/ParticleSphere'))
+const ChatbotSphere = lazy(() => import('./components/ChatbotSphere'))
+
+// Loading fallback component
+const LoadingFallback = () => null
 
 function App() {
   return (

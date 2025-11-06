@@ -1,8 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import HeroNavbar from '../components/HeroNavbar'
-import ParticleSphere from '../components/ParticleSphere'
-import ChatbotSphere from '../components/ChatbotSphere'
 import './Home.css'
+
+// Lazy load heavy Three.js components
+const ParticleSphere = lazy(() => import('../components/ParticleSphere'))
+const ChatbotSphere = lazy(() => import('../components/ChatbotSphere'))
 
 export default function Home() {
   const [activeLumiere, setActiveLumiere] = useState('son')
@@ -290,7 +292,9 @@ export default function Home() {
       </section>
 
       <div ref={sphereRef}>
-        <ParticleSphere />
+        <Suspense fallback={<div style={{ height: '600px' }} />}>
+          <ParticleSphere />
+        </Suspense>
       </div>
 
       <section ref={connectSectionRef} style={{ background: '#191919', padding: '100px 80px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
@@ -375,7 +379,9 @@ export default function Home() {
         </div>
       </section>
 
-      <ChatbotSphere />
+      <Suspense fallback={null}>
+        <ChatbotSphere />
+      </Suspense>
     </div>
   )
 }
