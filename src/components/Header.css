@@ -1,0 +1,104 @@
+.header {
+  background-color: #191919;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 20px 80px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo img {
+  height: 35px;
+  width: auto;
+  object-fit: contain;
+}
+
+.header-pill {
+  display: flex;
+  background-color: rgba(0, 0, 0, 1);
+  border-radius: 50px;
+  padding: 6px;
+  gap: 0;
+  flex: 1;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.pill-tab {
+  flex: 1;
+  padding: 12px 25px;
+  border: none;
+  background-color: transparent;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 50px;
+  white-space: nowrap;
+}
+
+.pill-tab.active {
+  background-color: #262626;
+  color: white;
+}
+
+.pill-tab:hover:not(.active) {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-number {
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.header-menu {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.header-menu:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 20px 30px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .header-pill {
+    max-width: 100%;
+  }
+
+  .pill-tab {
+    font-size: 11px;
+    padding: 10px 20px;
+  }
+}
