@@ -219,7 +219,7 @@ export default function Home() {
             </p>
           </div>
           <div className="secrets-image">
-            <img src="/img/Section 3.webp" alt="Section 3" />
+            <img src="/img/Section 3.webp" alt="Section 3" width="425" height="380" loading="lazy" />
           </div>
         </div>
       </section>
@@ -341,7 +341,7 @@ export default function Home() {
       </section>
 
       <section style={{ background: '#191919', padding: '0', margin: '150px 0 0 0', width: '100%' }}>
-        <img src="/img/Section complète.webp" alt="Section complète" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        <img src="/img/Section complète.webp" alt="Section complète" width="1920" height="600" style={{ width: '100%', height: 'auto', display: 'block' }} loading="lazy" />
       </section>
 
       <section className="testimonial" style={{ minHeight: '40vh' }}>
@@ -365,7 +365,7 @@ export default function Home() {
       <section className="secrets-section" style={{ padding: '40px 100px' }}>
         <div className="secrets-container" style={{ gridTemplateColumns: '1.5fr 1fr' }}>
           <div className="secrets-image">
-            <img src="/img/Image Integration.webp" alt="Integration Section" />
+            <img src="/img/Image Integration.webp" alt="Integration Section" width="425" height="380" loading="lazy" />
           </div>
           <div className="secrets-text">
             <h2 className="secrets-title">

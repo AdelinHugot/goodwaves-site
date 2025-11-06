@@ -8,6 +8,7 @@ export default defineConfig({
     open: true
   },
   build: {
+    target: 'ES2020',
     rollupOptions: {
       output: {
         manualChunks: {
@@ -20,8 +21,13 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true
-      }
-    }
+        drop_console: true,
+        drop_debugger: true,
+        passes: 2
+      },
+      mangle: true
+    },
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 1000
   }
 })
