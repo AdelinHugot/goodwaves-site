@@ -8,6 +8,8 @@ const ChatbotSphere = lazy(() => import('../components/ChatbotSphere'))
 
 export default function Home() {
   const [activeLumiere, setActiveLumiere] = useState('son')
+  const [renderParticleSphere, setRenderParticleSphere] = useState(false)
+  const [renderChatbotSphere, setRenderChatbotSphere] = useState(false)
   const testimonialRef = useRef(null)
   const neaSectionRef = useRef(null)
   const neaTitleRef = useRef(null)
@@ -16,6 +18,7 @@ export default function Home() {
   const sphereRef = useRef(null)
   const connectSectionRef = useRef(null)
   const rightTextRef = useRef(null)
+  const chatbotRef = useRef(null)
 
   const lumiereContent = {
     son: {
@@ -76,14 +79,32 @@ export default function Home() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('particle-sphere-animated')
+          // Trigger rendering of ParticleSphere when visible
+          setRenderParticleSphere(true)
           sphereObserver.unobserve(entry.target)
         }
       })
     }, sphereObserverOptions)
 
+    const chatbotObserverOptions = {
+      threshold: 0.1,
+      rootMargin: '100px'
+    }
+
+    const chatbotObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // Trigger rendering of ChatbotSphere when visible
+          setRenderChatbotSphere(true)
+          chatbotObserver.unobserve(entry.target)
+        }
+      })
+    }, chatbotObserverOptions)
+
     if (neaTitleRef.current) observer.observe(neaTitleRef.current)
     if (neaTextRef.current) textObserver.observe(neaTextRef.current)
     if (sphereRef.current) sphereObserver.observe(sphereRef.current)
+    if (chatbotRef.current) chatbotObserver.observe(chatbotRef.current)
 
     // Scroll parallax pour la section NEA Connect et NEA
     const handleConnectScroll = () => {
@@ -167,6 +188,7 @@ export default function Home() {
       observer.disconnect()
       textObserver.disconnect()
       sphereObserver.disconnect()
+      chatbotObserver.disconnect()
       window.removeEventListener('scroll', handleConnectScroll)
     }
   }, [])
@@ -292,9 +314,12 @@ export default function Home() {
       </section>
 
       <div ref={sphereRef}>
-        <Suspense fallback={<div style={{ height: '600px' }} />}>
-          <ParticleSphere />
-        </Suspense>
+        {renderParticleSphere && (
+          <Suspense fallback={<div style={{ height: '600px' }} />}>
+            <ParticleSphere />
+          </Suspense>
+        )}
+        {!renderParticleSphere && <div style={{ height: '600px', background: '#191919' }} />}
       </div>
 
       <section ref={connectSectionRef} style={{ background: '#191919', padding: '100px 80px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
@@ -379,9 +404,13 @@ export default function Home() {
         </div>
       </section>
 
-      <Suspense fallback={null}>
-        <ChatbotSphere />
-      </Suspense>
+      <div ref={chatbotRef}>
+        {renderChatbotSphere && (
+          <Suspense fallback={null}>
+            <ChatbotSphere />
+          </Suspense>
+        )}
+      </div>
     </div>
   )
 }
