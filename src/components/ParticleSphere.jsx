@@ -63,11 +63,20 @@ export default function ParticleSphere() {
       }
 
       float getDeepCrevasse(vec3 pos) {
-        // Simplified version: use position directly instead of distance calculations
-        float deepCrevasse = sin(pos.x * 8.0) * 0.3 +
-                            sin(pos.y * 7.0) * 0.25 +
-                            sin(pos.z * 6.0) * 0.2;
-        return deepCrevasse * 0.5;
+        float deepCrevasse = 0.0;
+        float dist1 = distance(normalize(pos), normalize(vec3(0.5, 0.7, 0.3)));
+        deepCrevasse += exp(-dist1 * 8.0) * sin(pos.x * 10.0);
+        float dist2 = distance(normalize(pos), normalize(vec3(-0.6, 0.4, -0.2)));
+        deepCrevasse += exp(-dist2 * 8.0) * sin(pos.y * 10.0);
+        float dist3 = distance(normalize(pos), normalize(vec3(0.2, -0.8, 0.4)));
+        deepCrevasse += exp(-dist3 * 8.0) * sin(pos.z * 10.0);
+        float dist4 = distance(normalize(pos), normalize(vec3(-0.4, -0.5, 0.6)));
+        deepCrevasse += exp(-dist4 * 8.0) * sin(pos.x * 10.0);
+        float dist5 = distance(normalize(pos), normalize(vec3(0.7, -0.2, -0.5)));
+        deepCrevasse += exp(-dist5 * 8.0) * sin(pos.y * 10.0);
+        float dist6 = distance(normalize(pos), normalize(vec3(-0.3, 0.2, -0.8)));
+        deepCrevasse += exp(-dist6 * 8.0) * sin(pos.z * 10.0);
+        return deepCrevasse;
       }
 
       void main() {
@@ -102,12 +111,11 @@ export default function ParticleSphere() {
         pos += normal * sin(uTime * 0.5 + length(position)) * 0.15;
         pos += normal * wavePulse * 1.5;
 
-        // Simplified drift: reduced sin/cos calculations
-        float moveX = sin(position.y * 1.5 + uTime * 0.03);
-        float moveY = cos(position.x * 1.5 + uTime * 0.03);
-        float moveZ = sin((position.x + position.y) * 1.0 + uTime * 0.02);
+        float moveX = sin(position.y * 2.0 + uTime * 0.03) * cos(position.z * 1.5 + uTime * 0.025);
+        float moveY = cos(position.x * 2.2 + uTime * 0.035) * sin(position.z * 1.8 + uTime * 0.02);
+        float moveZ = sin(position.x * 1.8 + uTime * 0.032) * cos(position.y * 2.1 + uTime * 0.028);
 
-        vec3 drift = vec3(moveX, moveY, moveZ) * 0.1;
+        vec3 drift = vec3(moveX, moveY, moveZ) * 0.15;
         pos += drift;
 
         float pull = max(0.0, 1.0 - mouseDist / 40.0) * 0.1;
@@ -144,17 +152,26 @@ export default function ParticleSphere() {
 
         if (length(gl_PointCoord - vec2(0.5, 0.5)) > 0.5) discard;
 
-        float light = 0.85 + 0.15 * sin(uTime * 1.5 + vPos.x);
+        float light = 0.9 + 0.1 * sin(uTime * 2.0 + vPos.x * 2.0);
 
-        // Simplified flash effect
-        float flash = sin(uTime * 2.0 + vPos.x * 5.0 + vPos.y * 5.0) * 0.5 + 0.5;
-        vec3 flashColor = vec3(0.9, 0.3, 1.0);
-        vec3 finalColor = mix(vColor, flashColor, flash * 0.2);
+        float flash = sin(uTime * 4.0 + vPos.x * 10.0 + vPos.y * 10.0) * 0.5 + 0.5;
+        float flashProbability = sin(vPos.x * 3.5 + vPos.y * 2.1 + vPos.z * 4.3);
+        vec3 flashColor = vec3(1.0, 0.2, 0.8);
 
-        // Simplified mouse influence
-        float mouseInfluence = max(0.0, 1.0 - vMouse / 15.0);
-        vec3 violetLight = vec3(1.0, 0.4, 1.0) * mouseInfluence * 1.5;
+        vec3 finalColor = mix(vColor, flashColor, flash * max(0.0, flashProbability) * 0.4);
+
+        // Ajouter l'effet de lumière violette basée sur la distance à la souris
+        float mouseInfluence = max(0.0, 1.0 - vMouse / 12.0);
+        vec3 violetLight = vec3(1.0, 0.4, 1.0) * mouseInfluence * mouseInfluence * 2.0;
         finalColor += violetLight;
+
+        // Ajouter l'effet de vague violette douce qui suit la souris
+        float waveDistance = vMouse;
+        float wave = sin(waveDistance * 0.1 - uWaveTime * 2.0) * 0.5 + 0.5;
+        float waveStrength = max(0.0, 1.0 - waveDistance / 30.0);
+        float wavePulse = wave * waveStrength * 0.2;
+        vec3 waveColor = vec3(0.8, 0.1, 1.0) * wavePulse * 0.8;
+        finalColor += waveColor;
 
         float alpha = (1.0 - dist * dist) * 0.8;
 
