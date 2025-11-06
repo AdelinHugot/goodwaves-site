@@ -22,9 +22,13 @@
     <meta property="twitter:title" content="Goodwaves - Technologie Invisible pour Vos Espaces" />
     <meta property="twitter:description" content="Découvrez une technologie invisible qui transforme vos espaces. Son, Lumière et Univers Connecté orchestrés en harmonie parfaite." />
     <meta property="twitter:image" content="/img/Image héroïque.webp" />
+
+    <!-- Defer non-critical CSS with media="print" trick -->
+    <link rel="stylesheet" href="/src/index.css" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="/src/index.css" /></noscript>
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" defer src="/src/main.jsx"></script>
 </body>
 </html>
