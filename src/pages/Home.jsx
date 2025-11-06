@@ -19,19 +19,19 @@ export default function Home() {
 
   const lumiereContent = {
     son: {
-      image: 'url("/img/Univers-Son.png")',
+      image: 'url("/img/Univers Son.webp")',
       title: 'Le Son Invisible',
       subtitle: 'La mélodie de vos désirs',
       text: 'Un son qui n\'a pas de visage, mais qui habille chaque espace d\'une ambiance parfaite. Notre technologie acoustique se fond dans le décor, pour que vous ne perceviez que la magie du moment.'
     },
     lumiere: {
-      image: 'url("/img/Univers-Lumière.png")',
+      image: 'url("/img/Univers Lumière.webp")',
       title: 'La Lumière Sculptée',
       subtitle: 'L\'art de révéler vos espaces',
       text: 'La lumière devient une alliée invisible. Elle sculpte vos pièces avec une délicatesse imperceptible, révélant l\'atmosphère parfaite à chaque instant, sans jamais perturber l\'harmonie visuelle.'
     },
     univers: {
-      image: 'url("/img/Univers-Connecté.png")',
+      image: 'url("/img/Univers Connecté.webp")',
       title: 'Les Univers Connectés',
       subtitle: 'L\'anticipation de vos envies',
       text: 'Vos espaces devancent vos désirs. Une technologie invisible orchestre chaque détail, pour que votre environnement s\'adapte sans effort, anticipant chacun de vos besoins.'
@@ -173,7 +173,7 @@ export default function Home() {
 
   return (
     <div className="home">
-      <section className="hero" style={{ backgroundImage: "url('/img/Hero image.png')" }}>
+      <section className="hero" style={{ backgroundImage: "url('/img/Image héroïque.webp')" }}>
         <HeroNavbar />
         <div className="hero-overlay">
 
@@ -219,7 +219,7 @@ export default function Home() {
             </p>
           </div>
           <div className="secrets-image">
-            <img src="/img/Section-3.png" alt="Section 3" />
+            <img src="/img/Section 3.webp" alt="Section 3" />
           </div>
         </div>
       </section>
@@ -341,7 +341,7 @@ export default function Home() {
       </section>
 
       <section style={{ background: '#191919', padding: '0', margin: '150px 0 0 0', width: '100%' }}>
-        <img src="/img/Section complète.png" alt="Section complète" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        <img src="/img/Section complète.webp" alt="Section complète" style={{ width: '100%', height: 'auto', display: 'block' }} />
       </section>
 
       <section className="testimonial" style={{ minHeight: '40vh' }}>
@@ -365,7 +365,7 @@ export default function Home() {
       <section className="secrets-section" style={{ padding: '40px 100px' }}>
         <div className="secrets-container" style={{ gridTemplateColumns: '1.5fr 1fr' }}>
           <div className="secrets-image">
-            <img src="/img/Image Integration.png" alt="Integration Section" />
+            <img src="/img/Image Integration.webp" alt="Integration Section" />
           </div>
           <div className="secrets-text">
             <h2 className="secrets-title">
